@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h1 class="text-center">Sree Vidyanikethan Engineering College Nepalese Hostellers List</h1>
+    <!-- Button trigger modal -->
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">Add
+            Entries</button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade form" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Student Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ">
+                    <label for="rollNo">Roll No:</label>
+                    <input type="text" id="rollNo" class="form-control" name="rollNo">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" class="form-control">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" class="form-control">
+                    <label for="phone">Phone No:</label>
+                    <input type="text" id="phone" name="phone" class="form-control">
+                    <label for="pyear">PassOut Year:</label>
+                    <input type="text" id="pyear" name="pyear" class="form-control">
+                    <label for="branch">Branch:</label>
+                    <input type="text" id="branch" name="branch" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- UpadteModal -->
+    <div class="modal fade form" id="updateExampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Student Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ">
+                    <label for="rollNoUpdate">Roll No:</label>
+                    <input type="text" id="rollNoUpdate" class="form-control" name="rollNoUpdate" disabled>
+                    <label for="nameUpdate">Full Name:</label>
+                    <input type="text" id="nameUpdate" name="nameUpdate" class="form-control">
+                    <label for="addressUpdate">Address:</label>
+                    <input type="text" id="addressUpdate" name="addressUpdate" class="form-control">
+                    <label for="phoneUpdate">Phone No:</label>
+                    <input type="text" id="phoneUpdate" name="phoneUpdate" class="form-control">
+                    <label for="pyearUpdate">PassOut Year:</label>
+                    <input type="text" id="pyearUpdate" name="pyearUpdate" class="form-control">
+                    <label for="branchUpdate">Branch:</label>
+                    <input type="text" id="branchUpdate" name="branchUpdate" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="update">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 class="text-center">Each one of the list is our family member</h1><br>
+    <div id="target"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        //displaying list on page load through js
+        window.onload = () => {
+            displayList();
+        }
+        //displaying list
+        const displayList = () => {
+            $.ajax({
+                url: "index.php",
+                type: "post",
+                data: { display: "display" },
+                success: (data, status) => {
+                    document.getElementById("target").innerHTML = data;
+                }
+            });
+
+        }
+        var save = document.getElementById("save");
+        save.addEventListener("click", () => {
+            //reference variable
+            var r=$("#rollNo");
+            var n=$("#name");
+            var a=$("#address");
+            var ph=$("#phone");
+            var poy=$("#pyear");
+            var b=$("#branch");
+            //hiding modal
+            $("#exampleModal").modal("hide");
+            $.ajax({
+                url: "index.php",
+                type: "POST",
+                data: {
+                    roll: r.val(),
+                    name: n.val(),
+                    address:a.val(),
+                    phone: ph.val(),
+                    pyear: poy.val(),
+                    branch: b.val()
+                },
+                success: (data, status) => {
+                    displayList();
+                    // console.log(data);
+                    //clearing data of model after saving
+                    r.val("");
+                    n.val("");
+                    a.val("");
+                    ph.val("");
+                    poy.val("");
+                    b.val("");
+                }
+            });
+        });
+        var deleteItem = (id) => {
+            console.log("delete presed");
+            console.log(id);
+            var confirmation = confirm("do you want to delete info of Roll No:" + id);
+            if (confirmation == true) {
+                $.post("index.php", { rollNoDelete: id }, (data, status) => {
+                    displayList();
+                });
+            }
+        }
+        var u_rn = document.getElementById("rollNoUpdate");
+        var u_n = document.getElementById("nameUpdate");
+        var u_a = document.getElementById("addressUpdate");
+        var u_ph = document.getElementById("phoneUpdate");
+        var u_poy = document.getElementById("pyearUpdate");
+        var u_b = document.getElementById("branchUpdate");
+        var editItem = (id) => {
+            console.log("edit pressed");
+            console.log(id);
+            $("#updateExampleModal").modal("show");
+            $.post("index.php", { rollNoForDisplayingDataForUpdate: id }, (data, status) => {
+                var receivedArray = JSON.parse(data);
+                // console.log(data);
+                u_rn.value = receivedArray[0];
+                u_n.value = receivedArray[1];
+                u_a.value = receivedArray[2];
+                u_ph.value = receivedArray[3];
+                u_poy.value = receivedArray[4];
+                u_b.value = receivedArray[5];
+            });
+
+        }
+        //for update button
+        var update = document.getElementById("update");
+        update.addEventListener("click", () => {
+            $.post("index.php", {
+                rollNoUpdate: u_rn.value,
+                nameUpdate: u_n.value,
+                addressUpdate: u_a.value,
+                phoneNoUpdate: u_ph.value,
+                passOutYearUpdate: u_poy.value,
+                branchUpdate: u_b.value
+            },
+                (data, status) => {
+                    $("#updateExampleModal").modal("hide");
+                    displayList();
+                });
+        });
+
+    </script>
+</body>
+
+</html>
